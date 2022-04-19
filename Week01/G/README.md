@@ -1,0 +1,1 @@
+# https://tsukuba.kattis.com/problems/toilet
