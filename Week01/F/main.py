@@ -1,3 +1,5 @@
+import math
+
 if __name__ == '__main__':
     line = input()
     maxN = 0
@@ -8,7 +10,7 @@ if __name__ == '__main__':
         maxN = max(n, maxN)
         results = [[0 for j in range(2)] for i in range(maxN)]
 
-        for i in range(k):
+        for i in range(math.ceil(k * n * (n-1) / 2)):
             p1, m1, p2, m2 = input().split()
             if m1 == m2:
                 pass
