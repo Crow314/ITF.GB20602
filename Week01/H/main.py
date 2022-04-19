@@ -32,8 +32,8 @@ def func4(A: List[int]):
 
 def func5(A: List[int]):
     s = 0
-    for i, n in enumerate(A):
-        if i % 2 == 1:
+    for n in A:
+        if n % 2 == 0:
             s += n
     print(s)
 
@@ -47,20 +47,19 @@ def func6(A: List[int]):
 
 def func7(A: List[int]):
     i = 0  # a
-    appeared = []
+    appeared = set()
     while True:  # e1
-        appeared.append(i)
+        appeared.add(i)
         i = A[i]  # b
 
-        if i in appeared:  # e2
-            print("Cyclic")
-            break
-
-        if i < 0 or i >= N-1:  # c
+        if i < 0 or i > N-1:  # c
             print("Out")
             break
         elif i == N-1:  # d
             print("Done")
+            break
+        elif i in appeared:  # e2
+            print("Cyclic")
             break
 
 
