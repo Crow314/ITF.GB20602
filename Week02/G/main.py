@@ -12,13 +12,13 @@ if __name__ == '__main__':
         except EOFError:
             break
 
-    count = 0
+    opinions = []
     for i in range(P):
-        for j in range(i+1, P):
-            if i != j:
-                if heard[i] != heard[j]:
-                    count += 1
+        flg = True
+        for j in range(len(opinions)):
+            if heard[i] == opinions[j]:
+                flg = False
+        if flg:
+            opinions.append(heard[i])
 
-    if P == 1:
-        count = 1
-    print(count)
+    print(len(opinions))
