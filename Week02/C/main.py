@@ -57,4 +57,3 @@ if __name__ == '__main__':
                 bid = 0
 
             print(str('-' if (ask == 1001) else ask) + ' ' + str('-' if (bid == 0) else bid) + ' ' + str(stock))
-            a = 0
