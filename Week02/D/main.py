@@ -18,7 +18,7 @@ if __name__ == '__main__':
     for i in range(1, N):
         finished[i][0] = finished[i-1][0] + times[i][0]
 
-    # i>0, j>0
+    # i=0, j>0
     for i in range(1, N):
         for j in range(1, M):
             finished[i][j] = max(finished[i-1][j], finished[i][j-1]) + times[i][j]
