@@ -3,39 +3,27 @@ if __name__ == '__main__':
     N = tmp[0]
     M = tmp[1]
 
-    time_remaining = []
+    times = []
+    for i in range(N):
+        times.append(list(map(int, input().split())))
+
+    finished = [[1_000_000_000_000 for j in range(M)] for i in range(N)]
+    finished[0][0] = times[0][0]
+
+    # i=0
+    for j in range(1, M):
+        finished[0][j] = finished[0][j-1] + times[0][j]
+
+    # i>0, j=0
+    for i in range(1, N):
+        finished[i][0] = finished[i-1][0] + times[i][0]
+
+    # i>0, j>0
+    for i in range(1, N):
+        for j in range(1, M):
+            finished[i][j] = max(finished[i-1][j], finished[i][j-1]) + times[i][j]
 
     for i in range(N):
-        time_remaining.append(list(map(int, input().split())))
-
-    time = 0
-    stages = [0 for i in range(N)]
-    working = [-1 for j in range(M)]
-    finished = [0 for i in range(N)]
-
-    while finished[N-1] == 0:
-        work_time = 1_000_000
-
-        for j in range(M):
-            idle = True
-            for i, stage in enumerate(stages):
-                if stage == j and time_remaining[i][j] != 0:
-                    idle = False
-                    working[j] = i
-                    work_time = min(time_remaining[i][j], work_time)
-                    break
-            if idle:
-                working[j] = -1
-
-        time += work_time
-        for j in range(M):
-            i = working[j]
-            if i >= 0:
-                time_remaining[i][j] -= work_time
-
-                if time_remaining[i][j] <= 0:
-                    stages[i] += 1
-                    if stages[i] >= M:
-                        finished[i] = time
-
-    print(*finished)
+        print(finished[i][M-1], end='')
+        if i < N-1:
+            print(' ', end='')
