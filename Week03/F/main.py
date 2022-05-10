@@ -16,11 +16,27 @@ if __name__ == '__main__':
 
     level = obstacles[0][1]
     count = 0
+    idx = 0
 
-    for obstacle in obstacles:
-        if obstacle[1] == level:
-            count += 1
-        else:
+    # bisection search
+    left = 0
+    right = H - 1
+    while True:
+        if right - left <= 1:
+            break
+
+        idx = int((left + right) / 2)
+
+        if obstacles[idx][1] == level:
+            left = idx
+            continue
+        if obstacles[idx][1] > level:
+            right = idx
+            continue
+
+    for i in range(idx-1, N):
+        if obstacles[i][1] != level:
+            count = i
             break
 
     print(str(level) + ' ' + str(count))
