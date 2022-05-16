@@ -29,7 +29,7 @@ if __name__ == '__main__':
                 dp[i][1][1] = dp[i-1][1][1]
                 dp[i][1][2] = dp[i-1][1][2]
 
-            if profit > dp[i][0][0]:
+            if profit >= dp[i][0][0]:
                 dp[i][0] = [profit, i, -1]
 
             if dp[i][0][0] > dp[i-1][1][0]:
