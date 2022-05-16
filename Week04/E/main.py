@@ -20,8 +20,8 @@ if __name__ == '__main__':
             seq.append(doll[1])
 
         LDS = [seq[0]]
-        for i in range(len(seq)):
-            if seq[i] < LDS[-1]:
+        for i in range(1, len(seq)):
+            if seq[i] <= LDS[-1]:
                 LDS.append(seq[i])
             else:
                 LDS[bisect.bisect_right(LDS, seq[i])-1] = seq[i]
