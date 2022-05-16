@@ -1,5 +1,5 @@
 RECORD_LENGTH = 1440
-COST = -0.08
+COST = -8
 
 if __name__ == '__main__':
     while True:
@@ -12,7 +12,7 @@ if __name__ == '__main__':
         for _ in range(n):
             time, profit = input().split()
             time = int(time)
-            profit = float(profit)
+            profit = int(round(float(profit) * 100))
 
             profits[time] += profit
 
@@ -39,6 +39,6 @@ if __name__ == '__main__':
                 dp[i][1] = [dp[i][0][0], dp[i][0][1], i]
 
         if dp[RECORD_LENGTH-1][1][0] > 0:
-            print(str(round(dp[RECORD_LENGTH-1][1][0], 2)) + ' ' + str(dp[RECORD_LENGTH-1][1][1]) + ' ' + str(dp[RECORD_LENGTH-1][1][2]))
+            print('{:.2f}'.format(round(dp[RECORD_LENGTH-1][1][0] / 100, 2)) + ' ' + str(dp[RECORD_LENGTH-1][1][1]) + ' ' + str(dp[RECORD_LENGTH-1][1][2]))
         else:
             print('no profit')
