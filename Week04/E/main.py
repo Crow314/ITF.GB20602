@@ -1,27 +1,5 @@
 import bisect
 
-
-class Doll:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-
-    def __eq__(self, other):
-        return (self.width == other.width) and (self.height == other.height)
-
-    def __lt__(self, other):
-        return (self.width < other.width) if (self.width != other.width) else (self.height > other.height)
-
-    def __gt__(self, other):
-        return (self.width > other.width) if (self.width != other.width) else (self.height < other.height)
-
-    def __le__(self, other):
-        return (self.width < other.width) if (self.width != other.width) else (self.height >= other.height)
-
-    def __ge__(self, other):
-        return (self.width > other.width) if (self.width != other.width) else (self.height <= other.height)
-
-
 if __name__ == '__main__':
     t = int(input())
 
@@ -29,23 +7,24 @@ if __name__ == '__main__':
         m = int(input())
         tmp = list(map(int, input().split()))
 
-        dolls = []
+        dolls = [[0, 0] for _ in range(m)]
 
         for i in range(0, m):
-            doll = Doll(tmp[i*2], tmp[i*2 + 1])
-            dolls.append(doll)
+            dolls[i][0] = tmp[i*2]
+            dolls[i][1] = -tmp[i*2 + 1]
 
-        dolls.sort()
+        dolls = sorted(dolls, key=lambda x: (x[0], x[1]))
         seq = []
 
         for doll in dolls:
-            seq.append(doll)
+            seq.append(doll[1])
 
         LDS = [seq[0]]
         for i in range(1, len(seq)):
-            if seq[i].height <= LDS[-1].height:
+            idx = bisect.bisect_right(LDS, seq[i])
+            if idx >= len(LDS):
                 LDS.append(seq[i])
             else:
-                LDS[bisect.bisect_right(LDS, seq[i])-1] = seq[i]
+                LDS[idx] = seq[i]
 
         print(len(LDS))
