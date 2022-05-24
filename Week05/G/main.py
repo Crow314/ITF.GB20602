@@ -42,15 +42,14 @@ if __name__ == '__main__':
 
     count = -1
     has_not_bipartite = False
-    while True:
-        try:
-            host = groups.index(False)
-            bipartite = bfs(graph, groups, host)
+    for i in range(N):
+        if groups[i] != 0:
+            continue
 
-            if not bipartite:
-                has_not_bipartite = True
-        except ValueError:
-            break
+        bipartite = bfs(graph, groups, i)
+
+        if not bipartite:
+            has_not_bipartite = True
 
         count += 1
 
