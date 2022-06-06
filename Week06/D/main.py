@@ -1,21 +1,26 @@
 from collections import deque
+import heapq
 
 MAX_VALUE = 10 ** 9
 
 
 def dijkstra(graph: list) -> list:
-    paths = [[MAX_VALUE, set()] for _ in range(len(graph))]  # [cost, src_set]
-    queue = deque()
+    vertex_count = len(graph)
+    paths = [[MAX_VALUE, set()] for _ in range(vertex_count)]  # [cost, src_set]
+    queue = []
 
     paths[0][0] = 0
-    queue.append(0)
+    heapq.heappush(queue, [0, 0])  # [cost, vertex]
 
     while len(queue) > 0:
-        vertex = queue.popleft()
+        _, vertex = heapq.heappop(queue)
 
         for next_edge in graph[vertex]:
             next_vertex = next_edge[0]
             next_cost = paths[vertex][0] + next_edge[1]
+
+            if next_cost > paths[vertex_count-1][0]:
+                continue
 
             if next_cost <= paths[next_vertex][0]:
                 if next_cost == paths[next_vertex][0]:
@@ -23,7 +28,9 @@ def dijkstra(graph: list) -> list:
                 else:
                     paths[next_vertex][0] = next_cost
                     paths[next_vertex][1] = {vertex}
-                queue.append(next_vertex)
+
+                if next_vertex < vertex_count - 1:
+                    heapq.heappush(queue, [next_cost, next_vertex])
 
     return paths
 
