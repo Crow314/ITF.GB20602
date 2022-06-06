@@ -7,6 +7,7 @@ MAX_VALUE = 10 ** 9
 def dijkstra(graph: list) -> list:
     vertex_count = len(graph)
     paths = [[MAX_VALUE, set()] for _ in range(vertex_count)]  # [cost, src_set]
+    visited = [False for _ in range(vertex_count)]
     queue = []
 
     paths[0][0] = 0
@@ -14,6 +15,10 @@ def dijkstra(graph: list) -> list:
 
     while len(queue) > 0:
         _, vertex = heapq.heappop(queue)
+
+        if visited[vertex]:
+            continue
+        visited[vertex] = True
 
         for next_vertex, next_edge in graph[vertex].items():
             next_cost = paths[vertex][0] + next_edge[0]
