@@ -15,9 +15,8 @@ def dijkstra(graph: list) -> list:
     while len(queue) > 0:
         _, vertex = heapq.heappop(queue)
 
-        for next_edge in graph[vertex]:
-            next_vertex = next_edge[0]
-            next_cost = paths[vertex][0] + next_edge[1]
+        for next_vertex, next_edge in graph[vertex].items():
+            next_cost = paths[vertex][0] + next_edge[0]
 
             if next_cost > paths[vertex_count-1][0]:
                 continue
@@ -46,9 +45,9 @@ def trace_path(paths: list, graph: list, goal: int) -> int:
         for src_vertex in paths[vertex][1]:
             queue.append(src_vertex)
 
-            for edge in graph[src_vertex]:
-                if edge[0] == vertex:
-                    total_len += edge[1] * edge[2]
+            edge = graph[src_vertex][vertex]
+            l = edge[0] * edge[1]
+            total_len += l
 
     return total_len * 2
 
@@ -56,38 +55,34 @@ def trace_path(paths: list, graph: list, goal: int) -> int:
 def main():
     P, T = map(int, input().split())
 
-    graph = [[] for _ in range(P)]
+    graph = [{} for _ in range(P)]
 
     for _ in range(T):
         p1, p2, l = map(int, input().split())
 
-        # [dst, len, times]
+        # {dst: [len, times]}
         # p1 -> p2
-        flg = True
-        for edge in graph[p1]:
-            if edge[0] == p2:
-                flg = False
-                if l < edge[1]:
-                    edge[1] = l
-                    edge[2] = 1
-                elif l == edge[1]:
-                    edge[2] += 1
-        if flg:
-            graph[p1].append([p2, l, 1])
+        if p2 in graph[p1]:
+            edge = graph[p1][p2]
+            if l < edge[0]:
+                edge[0] = l
+                edge[1] = 1
+            elif l == edge[0]:
+                edge[1] += 1
+        else:
+            graph[p1][p2] = [l, 1]
 
+        # p2 -> p1
         if p1 != p2:
-            # p2 -> p1
-            flg = True
-            for edge in graph[p2]:
-                if edge[0] == p1:
-                    flg = False
-                    if l < edge[1]:
-                        edge[1] = l
-                        edge[2] = 1
-                    if l == edge[1]:
-                        edge[2] += 1
-            if flg:
-                graph[p2].append([p1, l, 1])
+            if p1 in graph[p2]:
+                edge = graph[p2][p1]
+                if l < edge[0]:
+                    edge[0] = l
+                    edge[1] = 1
+                elif l == edge[0]:
+                    edge[1] += 1
+            else:
+                graph[p2][p1] = [l, 1]
 
     paths = dijkstra(graph)
     print(trace_path(paths, graph, P-1))
