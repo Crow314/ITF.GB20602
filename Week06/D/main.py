@@ -23,9 +23,6 @@ def dijkstra(graph: list) -> list:
         for next_vertex, next_edge in graph[vertex].items():
             next_cost = paths[vertex][0] + next_edge[0]
 
-            if next_cost > paths[vertex_count-1][0]:
-                continue
-
             if next_cost <= paths[next_vertex][0]:
                 if next_cost == paths[next_vertex][0]:
                     paths[next_vertex][1].add(vertex)
@@ -33,19 +30,24 @@ def dijkstra(graph: list) -> list:
                     paths[next_vertex][0] = next_cost
                     paths[next_vertex][1] = {vertex}
 
-                if next_vertex < vertex_count - 1:
-                    heapq.heappush(queue, [next_cost, next_vertex])
+                heapq.heappush(queue, [next_cost, next_vertex])
 
     return paths
 
 
 def trace_path(paths: list, graph: list, goal: int) -> int:
     total_len = 0
+    visited = [False for _ in range(len(graph))]
+
     queue = deque()
     queue.append(goal)
 
     while len(queue) > 0:
         vertex = queue.popleft()
+
+        if visited[vertex]:
+            continue
+        visited[vertex] = True
 
         for src_vertex in paths[vertex][1]:
             queue.append(src_vertex)
