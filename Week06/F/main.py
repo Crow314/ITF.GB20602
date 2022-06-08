@@ -20,7 +20,7 @@ def adj_list(rooms: list) -> list:
     return graph
 
 
-def bfs(graph: list, source: int) -> list:
+def bfs(graph: list, source: int, sink: int) -> list:
     n = len(graph)
     levels = [-1 for _ in range(n)]
     bfs_queue = deque()
@@ -44,10 +44,13 @@ def dfs(graph: list, levels: list, iterator: list, vertex: int, sink: int, flow:
     if vertex == sink:
         return flow
 
-    for i in range(iterator[vertex], len(graph[vertex])):
+    for i in range(max(iterator[vertex] - 1, 0), len(graph[vertex])):
         iterator[vertex] = i
         edge = graph[vertex][i]
         dst, cap, rev_edge = edge
+
+        if levels[dst] != levels[vertex] + 1:
+            continue
 
         if levels[vertex] < levels[dst]:
             f = dfs(graph, levels, iterator, dst, sink, min(flow, cap))
@@ -64,14 +67,14 @@ def max_flow(graph: list, source: int, sink: int) -> int:  # Dinic's algorithm
     INF = 10 ** 10
 
     while True:
-        levels = bfs(graph, source)
+        levels = bfs(graph, source, sink)
         if levels[sink] == -1:
             break
 
-        iter = [0 for _ in range(len(graph))]
+        itr = [0 for _ in range(len(graph))]
         f = INF
         while f != 0:
-            f = dfs(graph, levels, iter, source, sink, INF)
+            f = dfs(graph, levels, itr, source, sink, INF)
             flow += f
 
     return flow
