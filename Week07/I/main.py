@@ -1,24 +1,32 @@
-def LCS(str1: list, str2: list) -> int:
-    dp = [[0 for _ in range(len(str2)+1)] for _ in range(2)]
+import bisect
 
-    for i, v_i in enumerate(str1):
-        for j, v_j in enumerate(str2):
-            if v_i == v_j:
-                dp[1][j+1] = dp[0][j] + 1
-            else:
-                dp[1][j+1] = max(dp[1][j], dp[0][j+1])
 
-        dp[0] = dp[1]
+def LIS(seq: list) -> int:
+    ans = [seq[0]]
+    for i in range(len(seq)):
+        if seq[i] > ans[-1]:
+            ans.append(seq[i])
+        else:
+            ans[bisect.bisect_left(ans, seq[i])] = seq[i]
 
-    return dp[0][len(str2)]
+    return len(ans)
 
 
 def main() -> int:
     _ = input()
-    str_p = input()
-    str_q = input()
+    list_p = input().split()
+    list_q = input().split()
 
-    return LCS(str_p.split(), str_q.split())
+    dict_p = {}
+    for i, v in enumerate(list_p):
+        dict_p[v] = i
+
+    common_list = []
+    for v in list_q:
+        if v in dict_p.keys():
+            common_list.append(dict_p[v])
+
+    return LIS(common_list)
 
 
 if __name__ == '__main__':
