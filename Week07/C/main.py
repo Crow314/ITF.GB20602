@@ -10,6 +10,9 @@ def main():
         l = len(number)
         parent_node = root
 
+        if not consistent:
+            continue
+
         for i in range(l):
             c = number[i]
 
@@ -36,9 +39,6 @@ def main():
                     node[-1] = None
                 else:
                     parent_node = node
-
-        if not consistent:
-            break
 
     res = 'YES' if consistent else 'NO'
     print(res)
