@@ -1,4 +1,4 @@
-from collections import deque
+import heapq
 
 
 def main():
@@ -7,19 +7,19 @@ def main():
     numbers = []
 
     for _ in range(n):
-        numbers.append(input())
+        number = input()
+        numbers.append([len(number), number])
 
-    numbers.sort(key=len)
-    queue = deque(numbers)
+    heapq.heapify(numbers)
 
     flg = True
 
     for _ in range(n):
-        target = queue.popleft()
+        _, target = heapq.heappop(numbers)
         l = len(target)
 
-        for number in queue:
-            if number[:l] == target:
+        for number in numbers:
+            if number[1][:l] == target:
                 flg = False
                 break
 
