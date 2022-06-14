@@ -7,9 +7,17 @@ def main(string: str):
             continue
 
         ans = int(str_len / i)
-        substr = string[:i]
+        substr1 = string[:i]
 
-        if substr * ans == string:
+        flg = True
+        for j in reversed(range(1, ans)):
+            substr2 = string[i*j: i*(j+1)]
+
+            if substr1 != substr2:
+                flg = False
+                break
+
+        if flg:
             break
 
     print(ans)
@@ -18,7 +26,7 @@ def main(string: str):
 if __name__ == '__main__':
     while True:
         s = input()
-        if '.' in s:
+        if s == '.':
             break
 
         main(s)
