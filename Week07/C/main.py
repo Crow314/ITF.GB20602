@@ -1,30 +1,29 @@
-import heapq
-
-
 def main():
     n = int(input())
 
     numbers = []
 
-    for _ in range(n):
-        number = input()
-        numbers.append([len(number), number])
-
-    heapq.heapify(numbers)
-
     flg = True
 
     for _ in range(n):
-        _, target = heapq.heappop(numbers)
-        l = len(target)
+        number = input()
+        l = len(number)
 
-        for number in numbers:
-            if number[1][:l] == target:
-                flg = False
-                break
+        for exist in numbers:
+            exist_l = len(exist)
+            if exist_l > l:
+                if exist[:l] == number:
+                    flg = False
+                    break
+            else:
+                if number[:exist_l] == exist:
+                    flg = False
+                    break
 
         if not flg:
             break
+
+        numbers.append(number)
 
     res = 'YES' if flg else 'NO'
     print(res)
