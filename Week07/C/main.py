@@ -1,38 +1,38 @@
 def main():
     n = int(input())
 
-    graph = {}  # i*10+j: set() / i文字目がjのときの後続文字
+    root = {}
 
-    flg = True
+    consistent = True
 
     for _ in range(n):
         number = list(map(int, list(input())))
         l = len(number)
-        key = 0
+        node = root
 
         for i in range(l):
             c = number[i]
-            key = key * 10 + c
 
-            if key not in graph.keys():
-                graph[key] = set()
+            if c not in node.keys():
+                node[c] = {}
+            next_node = node[c]
 
-            if -1 in graph[key]:
-                flg = False
+            if -1 in next_node.keys():
+                consistent = False
                 break
 
-            if (i == l-1) or (i == 9):
-                if (-1 not in graph[key]) and (len(graph[key]) > 0):
-                    flg = False
+            if i == l-1:  # last char
+                if (-1 not in next_node.keys()) and (len(next_node) > 0):  # has next node
+                    consistent = False
                     break
-                graph[key].add(-1)
+                next_node[-1] = None
             else:
-                graph[key].add(key*10 + number[i+1])
+                node = next_node
 
-        if not flg:
+        if not consistent:
             break
 
-    res = 'YES' if flg else 'NO'
+    res = 'YES' if consistent else 'NO'
     print(res)
 
 
