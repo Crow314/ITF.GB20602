@@ -1,36 +1,31 @@
-def count_prime(n: int, prime: int) -> int:
-    count = 0
+def solve() -> list:
+    MAX = 1_000_000
 
-    while n % prime == 0:
-        count += 1
-        n //= prime
-
-    return count
-
-
-def main(n: int):
+    answers = [-1 for _ in range(MAX)]
+    answers[0] = 1
     ans = 1
-    prime2 = 0
-    prime5 = 0
 
-    for i in range(2, n+1):
+    for i in range(2, MAX+1):
         ans *= i
+        while ans % 10 == 0:
+            ans //= 10
 
-        prime2 += count_prime(i, 2)
-        prime5 += count_prime(i, 5)
+        answers[i-1] = ans % 10
+        ans %= MAX
 
-        count10 = min(prime2, prime5)
-        ans //= 10 ** count10
-        prime2 -= count10
-        prime5 -= count10
+    return answers
 
-    print(ans % 10)
+
+def main(answers: list, n: int):
+    print(answers[n-1] % 10)
 
 
 if __name__ == '__main__':
+    answers = solve()
+
     while True:
         case = int(input())
         if case == 0:
             break
 
-        main(case)
+        main(answers, case)
