@@ -5,8 +5,8 @@ DIRECTIONS_EVEN = [[-1, -1], [0, -1], [-1, 0], [1, 0], [-1, 1], [0, 1]]  # i=0, 
 DIRECTIONS_ODD = [[0, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [1, 1]]  # i=1, 3, 5, ...
 
 
-def dfs(beehive: list, seen: list, x: int, y: int) -> int:
-    seen[y][x] = True
+def dfs(beehive: list, x: int, y: int) -> int:
+    beehive[y][x] = '#'
 
     if y % 2 == 0:
         directions = DIRECTIONS_EVEN
@@ -25,10 +25,7 @@ def dfs(beehive: list, seen: list, x: int, y: int) -> int:
         if beehive[child_y][child_x] == '#':
             continue
 
-        if seen[child_y][child_x]:
-            continue
-
-        child_depth += dfs(beehive, seen, child_x, child_y)
+        child_depth += dfs(beehive, child_x, child_y)
 
     return child_depth + 1
 
@@ -40,8 +37,6 @@ def main():
     for _ in range(n):
         beehive.append(input().split())
 
-    seen = [[False for _ in range(m)] for _ in range(n)]
-
     depths = []
 
     sys.setrecursionlimit(10 ** 6)
@@ -51,10 +46,7 @@ def main():
             if beehive[y][x] == '#':
                 continue
 
-            if seen[y][x]:
-                continue
-
-            heapq.heappush(depths, dfs(beehive, seen, x, y) * -1)  # desc
+            heapq.heappush(depths, dfs(beehive, x, y) * -1)  # desc
 
     honey = 0
     count = 0
