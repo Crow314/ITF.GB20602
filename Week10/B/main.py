@@ -5,7 +5,7 @@ DIRECTIONS_EVEN = [[-1, -1], [0, -1], [-1, 0], [1, 0], [-1, 1], [0, 1]]  # i=0, 
 DIRECTIONS_ODD = [[0, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [1, 1]]  # i=1, 3, 5, ...
 
 
-def dfs(beehive: list, graph: list, seen: list, x: int, y: int) -> int:
+def dfs(beehive: list, seen: list, x: int, y: int) -> int:
     seen[y][x] = True
 
     if y % 2 == 0:
@@ -28,7 +28,7 @@ def dfs(beehive: list, graph: list, seen: list, x: int, y: int) -> int:
         if seen[child_y][child_x]:
             continue
 
-        child_depth += dfs(beehive, graph, seen, child_x, child_y)
+        child_depth += dfs(beehive, seen, child_x, child_y)
 
     return child_depth + 1
 
@@ -40,7 +40,6 @@ def main():
     for _ in range(n):
         beehive.append(input().split())
 
-    graph = [[0 for _ in range(m)] for _ in range(n)]
     seen = [[False for _ in range(m)] for _ in range(n)]
 
     depths = []
@@ -55,7 +54,7 @@ def main():
             if seen[y][x]:
                 continue
 
-            heapq.heappush(depths, dfs(beehive, graph, seen, x, y) * -1)  # desc
+            heapq.heappush(depths, dfs(beehive, seen, x, y) * -1)  # desc
 
     honey = 0
     count = 0
