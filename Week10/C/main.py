@@ -19,11 +19,11 @@ def main():
                 connections[i].append(j)
                 connections[j].append(i)
 
-    ratios = {0: [1, 1]}  # [numerator, denominator]
+    ratios = {n-1: [1, 1]}  # [numerator, denominator]
     queue = deque()
 
-    if len(connections[0]) > 0:
-        queue.append(0)
+    if len(connections[n-1]) > 0:
+        queue.append(n-1)
 
     can_move = True
 
@@ -31,8 +31,8 @@ def main():
         gear1 = queue.popleft()
 
         for gear2 in connections[gear1]:
-            ratio_numer = ratios[gear1][0] * gears[gear1][2] * -1
-            ratio_denom = ratios[gear1][1] * gears[gear2][2]
+            ratio_numer = ratios[gear1][0] * gears[gear1][2]
+            ratio_denom = ratios[gear1][1] * gears[gear2][2] * -1
 
             gcd = math.gcd(ratio_numer, abs(ratio_denom))
 
@@ -50,12 +50,12 @@ def main():
         if not can_move:
             break
 
-    if n-1 not in ratios:
+    if 0 not in ratios:
         print(0)
     elif not can_move:
         print(-1)
     else:
-        print(str(ratios[n-1][1]) + ' ' + str(ratios[n-1][0]))
+        print(str(ratios[0][0]) + ' ' + str(ratios[0][1]))
 
 
 if __name__ == '__main__':
