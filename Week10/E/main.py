@@ -5,22 +5,20 @@ input = sys.stdin.readline
 MAX_VALUE = 10 ** 10
 
 
-def dijkstra(graph: list, times: list, seen: list, n: int, start_time: int) -> int:
+def dijkstra(graph: list, times: list, n: int, start_time: int) -> int:
     for i in range(n):
         times[i] = MAX_VALUE
-        seen[i] = False
 
     queue = []
 
-    times[0] = 0
+    times[0] = start_time
     heapq.heappush(queue, [start_time, 0])  # [time_arrival, u]
 
     while queue:
         time_arrival, u = heapq.heappop(queue)
 
-        if seen[u]:
+        if time_arrival > times[u]:
             continue
-        seen[u] = True
 
         if u == n-1:
             break
@@ -51,16 +49,15 @@ def main():
         trams[u].append([v, t0, p, d])
 
     times = [MAX_VALUE for _ in range(n)]
-    seen = [False for _ in range(n)]
 
-    if dijkstra(trams, times, seen, n, 0) <= s:
+    if dijkstra(trams, times, n, 0) <= s:
         left = 0
         right = s
 
         while left < right:
             mid = (left + right) // 2 + (left + right) % 2
 
-            if dijkstra(trams, times, seen, n, mid) > s:
+            if dijkstra(trams, times, n, mid) > s:
                 right = mid - 1
             else:
                 left = mid
