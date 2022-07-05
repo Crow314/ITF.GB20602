@@ -1,41 +1,70 @@
+import math
+import heapq
+
+MAX_VALUE = 10 ** 10
+
+
+def dijkstra(graph: dict, n: int, start_time: int) -> int:
+    times = [MAX_VALUE for _ in range(n)]
+    seen = [False for _ in range(n)]
+
+    queue = []
+
+    times[0] = 0
+    heapq.heappush(queue, [start_time, 0])  # [time_arrival, u]
+
+    while queue:
+        time_arrival, u = heapq.heappop(queue)
+
+        if seen[u]:
+            continue
+        seen[u] = True
+
+        if u == n-1:
+            break
+
+        for v, t0, p, d in graph[u]:
+            if time_arrival < t0:
+                time_departure = t0
+            else:
+                time_departure = math.floor((time_arrival - t0 + p - 1) / p) * p + t0
+
+            eta = time_departure + d
+
+            if eta < times[v]:
+                times[v] = eta
+                heapq.heappush(queue, [eta, v])
+
+    return times[n-1]
+
+
 def main():
     n, m, s = map(int, input().split())
 
-    schedule = {}
+    trams = {}
 
     for _ in range(m):
         u, v, t0, p, d = map(int, input().split())
 
-        i = 0
-        while True:
-            departure = p * i + t0
-            arrival = departure + d
+        if u not in trams:
+            trams[u] = []
 
-            if arrival > s:
-                break
+        trams[u].append([v, t0, p, d])
 
-            if arrival not in schedule:
-                schedule[arrival] = []
+    if dijkstra(trams, n, 0) <= s:
+        left = 0
+        right = s
 
-            schedule[arrival].append([u, v, departure])
+        while left < right:
+            mid = math.ceil((left + right) / 2)
 
-            i += 1
+            if dijkstra(trams, n, mid) > s:
+                right = mid - 1
+            else:
+                left = mid
 
-    dp = [-1 for _ in range(n)]
-    dp[n-1] = s
+        print(left)
 
-    for i in reversed(range(s)):
-        if i not in schedule:
-            continue
-
-        for tram in schedule[i]:
-            u, v, departure = tram
-
-            if dp[v] > departure:
-                dp[u] = max(departure, dp[u])
-
-    if dp[0] >= 0:
-        print(dp[0])
     else:
         print('impossible')
 
