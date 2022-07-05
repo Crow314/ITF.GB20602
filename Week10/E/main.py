@@ -23,6 +23,9 @@ def dijkstra(graph: dict, n: int, start_time: int) -> int:
         if u == n-1:
             break
 
+        if u not in graph:
+            continue
+
         for v, t0, p, d in graph[u]:
             if time_arrival < t0:
                 time_departure = t0
