@@ -1,6 +1,7 @@
-import math
+import sys
 import heapq
 
+input = sys.stdin.readline
 MAX_VALUE = 10 ** 10
 
 
@@ -24,12 +25,11 @@ def dijkstra(graph: list, times: list, seen: list, n: int, start_time: int) -> i
         if u == n-1:
             break
 
-
         for v, t0, p, d in graph[u]:
             if time_arrival < t0:
                 time_departure = t0
             else:
-                time_departure = math.floor((time_arrival - t0 + p - 1) / p) * p + t0
+                time_departure = (time_arrival - t0 + p - 1) // p * p + t0
 
             eta = time_departure + d
 
@@ -58,7 +58,7 @@ def main():
         right = s
 
         while left < right:
-            mid = math.ceil((left + right) / 2)
+            mid = (left + right) // 2 + (left + right) % 2
 
             if dijkstra(trams, times, seen, n, mid) > s:
                 right = mid - 1
