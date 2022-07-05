@@ -4,9 +4,10 @@ import heapq
 MAX_VALUE = 10 ** 10
 
 
-def dijkstra(graph: dict, n: int, start_time: int) -> int:
-    times = [MAX_VALUE for _ in range(n)]
-    seen = [False for _ in range(n)]
+def dijkstra(graph: list, times: list, seen: list, n: int, start_time: int) -> int:
+    for i in range(n):
+        times[i] = MAX_VALUE
+        seen[i] = False
 
     queue = []
 
@@ -23,8 +24,6 @@ def dijkstra(graph: dict, n: int, start_time: int) -> int:
         if u == n-1:
             break
 
-        if u not in graph:
-            continue
 
         for v, t0, p, d in graph[u]:
             if time_arrival < t0:
@@ -44,24 +43,24 @@ def dijkstra(graph: dict, n: int, start_time: int) -> int:
 def main():
     n, m, s = map(int, input().split())
 
-    trams = {}
+    trams = [[] for _ in range(m)]
 
     for _ in range(m):
         u, v, t0, p, d = map(int, input().split())
 
-        if u not in trams:
-            trams[u] = []
-
         trams[u].append([v, t0, p, d])
 
-    if dijkstra(trams, n, 0) <= s:
+    times = [MAX_VALUE for _ in range(n)]
+    seen = [False for _ in range(n)]
+
+    if dijkstra(trams, times, seen, n, 0) <= s:
         left = 0
         right = s
 
         while left < right:
             mid = math.ceil((left + right) / 2)
 
-            if dijkstra(trams, n, mid) > s:
+            if dijkstra(trams, times, seen, n, mid) > s:
                 right = mid - 1
             else:
                 left = mid
