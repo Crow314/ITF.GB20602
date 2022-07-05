@@ -1,33 +1,44 @@
 import sys
 import heapq
+from collections import deque
 
 DIRECTIONS_EVEN = [[-1, -1], [0, -1], [-1, 0], [1, 0], [-1, 1], [0, 1]]  # i=0, 2, 4, ...
 DIRECTIONS_ODD = [[0, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [1, 1]]  # i=1, 3, 5, ...
 
 
-def dfs(beehive: list, x: int, y: int) -> int:
-    beehive[y][x] = '#'
+def bfs(beehive: list, start_x: int, start_y: int) -> int:
+    queue = deque()
+    area_size = 0
 
-    if y % 2 == 0:
-        directions = DIRECTIONS_EVEN
-    else:
-        directions = DIRECTIONS_ODD
+    queue.append([start_x, start_y])
 
-    child_depth = 0
+    while len(queue):
+        x, y = queue.popleft()
 
-    for direction in directions:
-        child_x = x + direction[0]
-        child_y = y + direction[1]
-
-        if (child_x < 0) or (len(beehive[y]) <= child_x) or (child_y < 0) or (len(beehive) <= child_y):
+        if beehive[y][x] == '#':
             continue
 
-        if beehive[child_y][child_x] == '#':
-            continue
+        area_size += 1
+        beehive[y][x] = '#'
 
-        child_depth += dfs(beehive, child_x, child_y)
+        if y % 2 == 0:
+            directions = DIRECTIONS_EVEN
+        else:
+            directions = DIRECTIONS_ODD
 
-    return child_depth + 1
+        for direction in directions:
+            child_x = x + direction[0]
+            child_y = y + direction[1]
+
+            if (child_x < 0) or (len(beehive[y]) <= child_x) or (child_y < 0) or (len(beehive) <= child_y):
+                continue
+
+            if beehive[child_y][child_x] == '#':
+                continue
+
+            queue.append([child_x, child_y])
+
+    return area_size
 
 
 def main():
@@ -46,7 +57,7 @@ def main():
             if beehive[y][x] == '#':
                 continue
 
-            heapq.heappush(depths, dfs(beehive, x, y) * -1)  # desc
+            heapq.heappush(depths, bfs(beehive, x, y) * -1)  # desc
 
     honey = 0
     count = 0
