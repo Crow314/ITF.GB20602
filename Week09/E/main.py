@@ -55,6 +55,10 @@ def main():
             theta = math.acos(inner_prod/(dist1 * dist2))
             angle = round(math.degrees(theta))
 
+            cross_prod = vec2[0]*vec1[1] - vec2[1]*vec1[0]  # vec2 X vec1
+            if cross_prod < 0:
+                angle *= -1
+
             if unknown_op == 'lt':
                 print(angle % 360)
             else:
