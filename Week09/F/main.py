@@ -55,8 +55,8 @@ def main():
             if (angle_prev <= min_angle) or (angle_next <= min_angle):
                 break
             else:
-                angles[min_idx-1] = angle_prev
-                angles[min_idx+1] = angle_next
+                angles[(min_idx-1) % n] = angle_prev
+                angles[(min_idx+1) % n] = angle_next
 
                 corners.pop(min_idx)
                 angles.pop(min_idx)
